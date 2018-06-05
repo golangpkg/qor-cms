@@ -1,0 +1,13 @@
+.idea
+*.iml
+.DS_Store
+*.zip
+*.log
+doc
+bin
+pkg
+main
+version
+tmp
+qor-cms.exe
+qor-cms.exe~
