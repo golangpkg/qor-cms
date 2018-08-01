@@ -1,0 +1,15 @@
+<div class="qor-field">
+  <label class="qor-field__label" for="imgUrl"  {{.InputId}}>
+    {{meta_label .Meta}}
+  </label>
+  <div class="qor-field__show qor-redactor__show redactor-styles">{{raw .Value}}</div>
+   <div class="qor-field__edit qor-field__block">
+   
+           <input id="imgUrlHidden" type="hidden" name="{{.InputName}}" value="{{.Value}}"/>
+           <img id="imgUrlPreview"  src="{{.Value}}" width="100px" height="100px" style="background-color: #ddd;"/>
+           <button id="imgUrlButton" class="btn btn-sm btn-primary" type="button"><i class="ace-icon fa fa-cloud-upload"></i>上传</button>
+  </div>
+</div>
+<link rel="stylesheet" href="/admin/assets/javascripts/kindeditor/themes/default/default.css">
+<script src="/admin/assets/javascripts/kindeditor-all-min.js"></script>
+<script src="/admin/assets/javascripts/qor_kindimage.js"></script>
