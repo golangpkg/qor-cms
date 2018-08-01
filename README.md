@@ -24,6 +24,9 @@ CREATE TABLE IF NOT EXISTS article (
  ```
 
 
- ## 环境构建&部署
+## 环境构建&部署
 
- docker run -utd -e MYSQL_ROOT_PASSWORD=mariadb mariadb
+
+```
+docker run -itd -e MYSQL_ROOT_PASSWORD=mariadb mariadb
+```
