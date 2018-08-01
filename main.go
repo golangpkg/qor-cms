@@ -2,15 +2,12 @@ package main
 
 import (
 	_ "github.com/golangpkg/qor-cms/routers"
-	//   "github.com/qor/qor"
 	"github.com/qor/admin"
-
 	"fmt"
 	"net/http"
 	"regexp"
 	"strings"
 	"time"
-
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/logs"
 	"github.com/golangpkg/qor-cms/conf/auth"
