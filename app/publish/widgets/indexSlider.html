@@ -1,0 +1,28 @@
+<!-- ############### slider start ############### -->
+<section class="section--center mdl-grid mdl-grid--no-spacing">
+    <div class="mdl-cell mdl-cell--12-col" style="text-align: center;">
+        <div class=" section--center flexslider mdl-shadow--2dp"
+             style="overflow: hidden;max-height: 300px;">
+            <div class="flex-viewport" style="text-align: center;">
+                <ul class="slides" style="overflow: hidden;">
+                    {{range .IndexSliderList}}
+                    <li class="clone" aria-hidden="true">
+                        <a href="{{.Url}}" target="_blank">
+                            <img src="{{.Image}}" draggable="false">
+                        </a>
+                    </li>{{end}}
+                </ul></div>
+        </div></div></section>
+<script src="/static/js/jquery.js"></script>
+<script src="/static/js/jquery.flexslider-min.js"></script>
+<script>
+    $(function(){
+        $('.flexslider').flexslider({
+            animation: 'slide',
+            touch: true,
+            directionNav: false,
+            smoothHeight: true
+        });
+    })
+</script>
+<!-- ############### slider start ############### -->

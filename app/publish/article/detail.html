@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>{{.SiteName}}-{{.Article.Title}}</title>
+    {{println "<!--# include virtual=\"/widgets/meta.html\" -->" | str2html}}
+    <meta name="referrer" content="always">
+    <meta name="description" content="{{.Article.Description}}" />
+    <meta name="keywords" content="{{.SiteName}}-{{.Article.Title}}" />
+</head>
+<body class="mdl-demo mdl-color--grey-100 mdl-color-text--grey-700 mdl-base">
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+
+    {{println "<!--# include virtual=\"/widgets/header.html\" -->" | str2html}}
+
+    <div class="demo-ribbon"></div>
+    <main class="mdl-layout__content">
+        <div class="demo-container mdl-grid is-active" id="overview">
+            <section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp" style="margin-top:35px;">
+                <div class="mdl-card mdl-cell mdl-cell--12-col">
+                    <div class="mdl-card__supporting-text">
+                        <h4>{{.Article.Title}}</h4>
+                        {{str2html .Article.Content}}
+                    </div>
+                </div>
+            </section>
+        </div>
+        {{println "<!--# include virtual=\"/widgets/footer.html\" -->" | str2html}}
+    </main>
+</div>
+<script src="/static/js/material.min.js"></script>
+</body>
+</html>

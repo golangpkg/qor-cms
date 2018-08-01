@@ -28,6 +28,7 @@ var (
 	tmplPath      = beego.AppConfig.String("publishArticleTmplPath")
 	htmlPath      = beego.AppConfig.String("publishArticleHtmlPath")
 	webBasePath   = beego.AppConfig.String("webBasePath")
+	siteName   = beego.AppConfig.String("siteName")
 	imageBasePath = beego.AppConfig.String("uploadBaseUrl")
 	page          = 10
 )
@@ -53,6 +54,7 @@ func GenArticlePage(pageNum, count, page int) {
 	data := make(map[string]interface{})
 	data["ArticleList"] = articles
 	data["WebBasePath"] = webBasePath
+	data["SiteName"] = siteName
 	data["ImageBasePath"] = imageBasePath
 
 	//将分页参数传入到页面中。
@@ -81,6 +83,7 @@ func GenArticlePage(pageNum, count, page int) {
 func GenArticleDetial(article Article) {
 	data := make(map[string]interface{})
 	data["Article"] = article
+	data["SiteName"] = siteName
 
 	fileName := htmlPath + article.Url
 	fileDir := filepath.Dir(fileName)

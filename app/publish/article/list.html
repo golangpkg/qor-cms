@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>{{.SiteName}}</title>
+    {{println "<!--# include virtual=\"/widgets/meta.html\" -->" | str2html}}
+</head>
+<body class="mdl-demo mdl-color--grey-100 mdl-color-text--grey-700 mdl-base">
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+
+    {{println "<!--# include virtual=\"/widgets/header.html\" -->" | str2html}}
+
+    <main class="mdl-layout__content">
+        <div class="mdl-layout__tab-panel is-active" id="overview">
+
+        {{println "<!--# include virtual=\"/widgets/indexSlider.html\" -->" | str2html}}
+
+            {{ $WebBasePath := .WebBasePath }}
+            {{ $ImageBasePath := .ImageBasePath }}
+            {{range .ArticleList}}
+            <section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp">
+                {{if eq "" .ImgUrl}}
+                    <div class="mdl-card mdl-cell mdl-cell--12-col">
+                        <div class="mdl-card__supporting-text">
+                            <a href="{{$WebBasePath}}{{.Url}}" target="_blank" class="mdl-button"><h4>{{.Title}}</h4></a>
+                            <span class="mdl-color-text--grey">{{date .CreatedAt "2006-01-02 15:04:05"}}</span>
+                            <p>{{.Description}}</p>
+                        </div>
+                        <div class="mdl-card__actions">
+                            <a href="{{$WebBasePath}}{{.Url}}" target="_blank" class="mdl-button">阅读详情</a>
+                        </div>
+                    </div>
+                {{else}}
+                    <header class="section__play-btn mdl-cell mdl-cell--3-col-desktop mdl-cell--2-col-tablet
+                    mdl-cell--4-col-phone mdl-color-text--white">
+                        <a href="{{$WebBasePath}}{{.Url}}" target="_blank"><image src="{{.ImgUrl}}" width="215" height="215"></image></a>
+                    </header>
+                    <div class="mdl-card mdl-cell mdl-cell--9-col">
+                        <div class="mdl-card__supporting-text">
+                            <a href="{{$WebBasePath}}{{.Url}}" target="_blank" class="mdl-button"><h4>{{.Title}}</h4></a>
+                            <span class="mdl-color-text--grey">{{date .CreatedAt "2006-01-02 15:04:05"}}</span>
+                            <p>{{.Description}}</p>
+                        </div>
+                        <div class="mdl-card__actions">
+                            <a href="{{$WebBasePath}}{{.Url}}" target="_blank" class="mdl-button">阅读详情</a>
+                        </div>
+                    </div>
+                {{end}}
+            </section>{{end}}
+        </div>
+        <section class="section--center mdl-grid mdl-grid--no-spacing " style="margin-top: 25px;">
+            <div class="mdl-cell mdl-cell--12-col" style="text-align: center;">
+                {{.PageHtml | str2html}}
+            </div>
+        </section>
+        {{println "<!--# include virtual=\"/widgets/footer.html\" -->" | str2html}}
+    </main>
+</div>
+<script src="/static/js/material.min.js"></script>
+</body>
+</html>
