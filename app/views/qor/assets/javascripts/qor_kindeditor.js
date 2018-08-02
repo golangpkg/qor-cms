@@ -24,7 +24,7 @@
         //console.log("################### kindeditor enable ###################");
         /*jshint undef:false */
         var editor = KindEditor.create('#kindeditor-id',{
-            uploadJson : '/common/kindeditor/upload?dir=image',
+            uploadJson : '/admin/common/kindeditor/upload?dir=image',
             allowFileManager : false,
             afterBlur: function(){this.sync();}
         });

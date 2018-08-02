@@ -12,6 +12,6 @@ func init() {
 	beego.Router("/auth/login", userInfoController, "get:LoginIndex")
 	beego.Router("/auth/login", userInfoController, "post:Login")
 	beego.Router("/auth/logout", userInfoController, "get:Logout")
-	beego.Router("/common/kindeditor/upload", &controllers.FileUploadController{}, "post:Upload")
+	beego.Router("/admin/common/kindeditor/upload", &controllers.FileUploadController{}, "post:Upload")
 
 }

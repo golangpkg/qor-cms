@@ -18,7 +18,7 @@
     function enable(target) {
         /*jshint undef:false */
         var uploadEditor = KindEditor.editor({
-            uploadJson: '/common/kindeditor/upload?dir=image',
+            uploadJson: '/admin/common/kindeditor/upload?dir=image',
             allowFileManager: false
         });
         $('#imgUrlButton').click(function () {
