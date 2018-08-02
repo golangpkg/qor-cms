@@ -28,26 +28,54 @@ var (
 	tmplPath      = beego.AppConfig.String("publishArticleTmplPath")
 	htmlPath      = beego.AppConfig.String("publishArticleHtmlPath")
 	webBasePath   = beego.AppConfig.String("webBasePath")
-	siteName   = beego.AppConfig.String("siteName")
+	siteName      = beego.AppConfig.String("siteName")
 	imageBasePath = beego.AppConfig.String("uploadBaseUrl")
 	page          = 10
 )
 
-func GenArticleList() {
+func GenArticleAndCategoryList(maxPage int) {
+	//生成文章
+	var categorys []Category
+	db.DB.Find(&categorys)
+	logs.Info("GenArticleAndCategoryList#####")
+	logs.Info(len(categorys))
+	for _, category := range categorys {
+		//GenArticleList(i)
+		logs.Info(category)
+		//公用生成模板。按照分类生成。
+		GenArticleList(category.ID, maxPage)
+	}
+	//公用生成模板。全部文章生成。
+	GenArticleList(0, maxPage)
+}
+
+func GenArticleList(id uint, maxPage int) {
 	var count int
-	db.DB.Model(&Article{}).Where(" is_publish = ? ", "1").Count(&count)
+	if id == 0 { //普通文章
+		db.DB.Model(&Article{}).Where(" is_publish = ? ", "1").Count(&count)
+	} else { //分类
+		db.DB.Model(&Article{}).Where(" is_publish = ? and category_id = ? ", "1", id).Count(&count)
+	}
+
 	pageAll := math.Ceil(float64(count) / float64(page))
 	logs.Info("pageAll : ", count, pageAll)
 	for i := 1; i <= int(pageAll); i ++ {
-		GenArticlePage(i, count, page)
+		GenArticlePage(i, count, page, id, maxPage)
 	}
 }
 
-func GenArticlePage(pageNum, count, page int) {
+func GenArticlePage(pageNum, count, page int, id uint, maxPage int) {
 	// Get all records
 	var articles []Article
 	limitPage := (pageNum - 1) * page //开始的数据num，page 大小 这个是从 1 开始的。主要是为了分页标签方便。
-	db.DB.Where(" is_publish = ? ", "1").Order("id desc").Limit(page).Offset(limitPage).Find(&articles)
+
+	if id == 0 { //普通文章
+		db.DB.Where(" is_publish = ? ", "1").Order("id desc").
+			Limit(page).Offset(limitPage).Find(&articles)
+	} else { //分类
+		db.DB.Where(" is_publish = ? and category_id = ? ", "1", id).
+			Order("id desc").Limit(page).Offset(limitPage).Find(&articles)
+	}
 
 	logs.Info(" ################# page limit offset :", pageNum, limitPage, page)
 	logs.Info(" ################# :", tmplPath, htmlPath, pageNum)
@@ -56,10 +84,14 @@ func GenArticlePage(pageNum, count, page int) {
 	data["WebBasePath"] = webBasePath
 	data["SiteName"] = siteName
 	data["ImageBasePath"] = imageBasePath
+	data["CategoryId"] = id //增加分类Id。
 
 	//将分页参数传入到页面中。
 	pageInfo := Page{PageSize: page, TotalCount: count, CurrentPage: pageNum}
 	strUrl := "/index%d.html"
+	if id > 0 { //分类
+		strUrl = fmt.Sprintf("/cat-%d-", id) + "index%d.html"
+	}
 	data["PageHtml"] = pageInfo.ToHtml(strUrl)
 
 	indexPageName := "index.html"
@@ -68,12 +100,21 @@ func GenArticlePage(pageNum, count, page int) {
 	}
 
 	fileName := htmlPath + indexPageName
+	tmpName := tmplPath + "article/list.html"
+
+	if id > 0 { //分类
+		fileName = htmlPath + fmt.Sprintf("cat/%d/", id) + indexPageName
+		tmpName = tmplPath + "article/categoryList.html"
+	}
 	fileDir := filepath.Dir(fileName)
 	//调用通用生成函数。
-	GenFileByTemplate(fileName, fileDir, tmplPath+"article/list.html", data)
+	GenFileByTemplate(fileName, fileDir, tmpName, data)
 
-	for _, article := range articles {
-		GenArticleDetial(article)
+	//支持增量更新，当maxPage = 0 的时候是全量，否则要要小于 maxPage.
+	if id == 0 && (maxPage == 0 || pageNum <= maxPage) { //普通文章
+		for _, article := range articles {
+			GenArticleDetial(article)
+		}
 	}
 	//进行debug，将数据打印到页面当中。
 	//t.Execute(os.Stdout, data)

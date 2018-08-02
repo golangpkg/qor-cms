@@ -11,10 +11,10 @@
 <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
 
     {{println "<!--# include virtual=\"/widgets/header.html\" -->" | str2html}}
-
     <div class="demo-ribbon"></div>
     <main class="mdl-layout__content">
-        <div class="demo-container mdl-grid is-active" id="overview">
+        <div class="mdl-grid">
+            <div class="mdl-cell mdl-cell--8-col">
             <section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp" style="margin-top:35px;">
                 <div class="mdl-card mdl-cell mdl-cell--12-col">
                     <div class="mdl-card__supporting-text">
@@ -23,9 +23,12 @@
                     </div>
                 </div>
             </section>
+            </div>
+            </section>
+        {{println "<!--# include virtual=\"/widgets/right.html\" -->" | str2html}}
         </div>
-        {{println "<!--# include virtual=\"/widgets/footer.html\" -->" | str2html}}
     </main>
+        {{println "<!--# include virtual=\"/widgets/footer.html\" -->" | str2html}}
 </div>
 <script src="/static/js/material.min.js"></script>
 </body>

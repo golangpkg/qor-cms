@@ -51,12 +51,24 @@ func main() {
 	//增加发布功能：
 	// 发布按钮，显示到右侧上面。
 	article.Action(&admin.Action{
-		Name:  "publish",
-		Label: "发布",
+		Name:  "publishAll",
+		Label: "全部发布",
 		Handler: func(actionArgument *admin.ActionArgument) error {
-			logs.Info("############### publish ###############")
+			logs.Info("############### publishAll ###############")
 			//生成html代码。
-			models.GenArticleList()
+			models.GenArticleAndCategoryList(0)
+			return nil
+		},
+		Modes: []string{"collection"},
+	})
+	// 发布按钮，显示到右侧上面。
+	article.Action(&admin.Action{
+		Name:  "publish5page",
+		Label: "增量发布5页",
+		Handler: func(actionArgument *admin.ActionArgument) error {
+			logs.Info("############### publish5page ###############")
+			//生成html代码。
+			models.GenArticleAndCategoryList(5)
 			return nil
 		},
 		Modes: []string{"collection"},
