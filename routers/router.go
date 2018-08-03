@@ -7,6 +7,7 @@ import (
 
 func init() {
 	//beego.Router("/", &controllers.MainController{})
+	beego.Router("/api/publish5page", &controllers.MainController{}, "get:GetApiPublish")
 	userInfoController := &controllers.UserInfoController{}
 	beego.Router("/", userInfoController, "get:LoginIndex")
 	beego.Router("/auth/login", userInfoController, "get:LoginIndex")
