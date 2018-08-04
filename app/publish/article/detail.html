@@ -6,6 +6,13 @@
     <meta name="referrer" content="always">
     <meta name="description" content="{{.Article.Description}}" />
     <meta name="keywords" content="{{.SiteName}}-{{.Article.Title}}" />
+    <style>
+        .tab{{.CategoryId}}-is-active { color: #fff; }
+        .tab{{.CategoryId}}-is-active::after {height: 2px;width: 100%;display: block;
+            content: " ";bottom: 0;left: 0;position: absolute;background: #fff;
+            animation: border-expand .2s cubic-bezier(.4,0,.4,1).01s alternate forwards;
+            transition: all 1s cubic-bezier(.4,0,1,1);}
+    </style>
 </head>
 <body class="mdl-demo mdl-color--grey-100 mdl-color-text--grey-700 mdl-base">
 <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
@@ -21,6 +28,14 @@
                         <h4>{{.Article.Title}}</h4>
                         {{str2html .Article.Content}}
                     </div>
+                    <div class="mdl-cell mdl-cell--12-col" style="text-align: center;">
+                        <a class="mdl-button mdl-cell--4-col mdl-button--raised mdl-button--colored" style="min-width: 20px;overflow: hidden;"
+                           href="/index2.html">&lt;&lt;&nbsp;金色财经-区块链12月27日链12月27日讯链12月27日讯链12月27日讯讯</a>
+                        <span class="mdl-button mdl-cell--3-col" style="min-width: 20px;">&nbsp;</span>
+                        <a class="mdl-button mdl-cell--4-col mdl-button--raised mdl-button--colored" style="min-width: 20px;overflow: hidden;"
+                           href="/index3.html">金色财经-区块链12月27日讯&nbsp;&gt;&gt;</a>
+                    </div>
+                    <div class="mdl-layout-spacer">&nbsp;</div>
                 </div>
             </section>
             </div>

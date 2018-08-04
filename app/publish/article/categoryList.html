@@ -5,12 +5,10 @@
     {{println "<!--# include virtual=\"/widgets/meta.html\" -->" | str2html}}
     <style>
         .tab{{.CategoryId}}-is-active { color: #fff; }
-        .tab{{.CategoryId}}-is-active::after {
-            height: 2px;width: 100%;display: block;
+        .tab{{.CategoryId}}-is-active::after {height: 2px;width: 100%;display: block;
             content: " ";bottom: 0;left: 0;position: absolute;background: #fff;
             animation: border-expand .2s cubic-bezier(.4,0,.4,1).01s alternate forwards;
-            transition: all 1s cubic-bezier(.4,0,1,1);
-        }
+            transition: all 1s cubic-bezier(.4,0,1,1);}
     </style>
 </head>
 <body class="mdl-demo mdl-color--grey-100 mdl-color-text--grey-700 mdl-base">
