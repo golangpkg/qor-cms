@@ -2,7 +2,6 @@ package models
 
 import (
 	"os"
-	"path/filepath"
 	"github.com/astaxie/beego/logs"
 	"log"
 	"io/ioutil"
@@ -27,10 +26,10 @@ func GenFileByTemplate(fileName, fileDir, templateFile string, data map[string]i
 		os.MkdirAll(fileDir, os.ModePerm)
 	}
 
-	fileBase := filepath.Base(fileName)
+	//fileBase := filepath.Base(fileName)
 	f, err := os.Create(fileName)
-	logs.Info("################# fileDir #################", fileDir)
-	logs.Info("################# fileBase #################", fileBase)
+	//logs.Info("################# fileDir #################", fileDir)
+	//logs.Info("################# fileBase #################", fileBase)
 	defer f.Close() //最后关闭文件。
 	logs.Info("write to file.", f.Name())
 	if err != nil {

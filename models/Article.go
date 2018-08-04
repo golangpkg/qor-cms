@@ -59,14 +59,44 @@ func GenArticleList(id uint, maxPage int) {
 
 	pageAll := math.Ceil(float64(count) / float64(page))
 	logs.Info("pageAll : ", count, pageAll)
+
+	var allArticles []Article
 	for i := 1; i <= int(pageAll); i ++ {
-		GenArticlePage(i, count, page, id, maxPage)
+		tmpList := GenArticlePage(i, count, page, id, maxPage)
+		for _, article := range tmpList {
+			allArticles = append(allArticles, article)
+		}
+	}
+
+	logs.Info(" ################# allArticles len :", len(allArticles))
+
+	//生成全部数据。
+	for i, article := range allArticles {
+		logs.Info(" ################# number article:", tmplPath, htmlPath, i)
+		//logs.Info("number article :", i )
+		data := make(map[string]interface{})
+		data["Article"] = article
+		data["SiteName"] = siteName
+		data["CategoryId"] = article.CategoryId
+		//#设置每一页的前一页，下一页数据。
+		if i != 0 {
+			tmpArticle := allArticles[i-1]
+			data["PrevName"] = tmpArticle.Title
+			data["PrevUrl"] = tmpArticle.Url
+		}
+		if i != (len(allArticles) - 1) {
+			tmpArticle := allArticles[i+1]
+			data["NextName"] = tmpArticle.Title
+			data["NextUrl"] = tmpArticle.Url
+		}
+
+		fileName := htmlPath + article.Url
+		GenArticleDetial(data, fileName)
 	}
 }
 
-func GenArticlePage(pageNum, count, page int, id uint, maxPage int) {
+func GenArticlePage(pageNum, count, page int, id uint, maxPage int) (articles []Article) {
 	// Get all records
-	var articles []Article
 	limitPage := (pageNum - 1) * page //开始的数据num，page 大小 这个是从 1 开始的。主要是为了分页标签方便。
 
 	if id == 0 { //普通文章
@@ -78,7 +108,7 @@ func GenArticlePage(pageNum, count, page int, id uint, maxPage int) {
 	}
 
 	logs.Info(" ################# page limit offset :", pageNum, limitPage, page)
-	logs.Info(" ################# :", tmplPath, htmlPath, pageNum)
+	//logs.Info(" ################# :", tmplPath, htmlPath, pageNum)
 	data := make(map[string]interface{})
 	data["ArticleList"] = articles
 	data["WebBasePath"] = webBasePath
@@ -112,24 +142,18 @@ func GenArticlePage(pageNum, count, page int, id uint, maxPage int) {
 
 	//支持增量更新，当maxPage = 0 的时候是全量，否则要要小于 maxPage.
 	if id == 0 && (maxPage == 0 || pageNum <= maxPage) { //普通文章
-		for _, article := range articles {
-			GenArticleDetial(article)
-		}
+		return articles
+	} else {
+		return []Article{}
 	}
 	//进行debug，将数据打印到页面当中。
 	//t.Execute(os.Stdout, data)
-
 }
 
-func GenArticleDetial(article Article) {
-	data := make(map[string]interface{})
-	data["Article"] = article
-	data["SiteName"] = siteName
+//生成文章详细。
+func GenArticleDetial(data map[string]interface{}, fileName string) {
 
-	fileName := htmlPath + article.Url
 	fileDir := filepath.Dir(fileName)
-
 	//调用通用生成函数。
 	GenFileByTemplate(fileName, fileDir, tmplPath+"article/detail.html", data)
-
 }

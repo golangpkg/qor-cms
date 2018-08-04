@@ -29,11 +29,19 @@
                         {{str2html .Article.Content}}
                     </div>
                     <div class="mdl-cell mdl-cell--12-col" style="text-align: center;">
+                    {{if .PrevName }}
                         <a class="mdl-button mdl-cell--4-col mdl-button--raised mdl-button--colored" style="min-width: 20px;overflow: hidden;"
-                           href="/index2.html">&lt;&lt;&nbsp;金色财经-区块链12月27日链12月27日讯链12月27日讯链12月27日讯讯</a>
+                           href="/{{.PrevUrl}}">&lt;&lt;&nbsp;{{.PrevName}}</a>
+                    {{else}}
+                        <span class="mdl-button mdl-cell--4-col" style="min-width: 20px;">&nbsp;</span>
+                    {{end}}
                         <span class="mdl-button mdl-cell--3-col" style="min-width: 20px;">&nbsp;</span>
+                    {{if .NextName }}
                         <a class="mdl-button mdl-cell--4-col mdl-button--raised mdl-button--colored" style="min-width: 20px;overflow: hidden;"
-                           href="/index3.html">金色财经-区块链12月27日讯&nbsp;&gt;&gt;</a>
+                           href="/{{.NextUrl}}">{{.NextName}}&nbsp;&gt;&gt;</a>
+                    {{else}}
+                        <span class="mdl-button mdl-cell--4-col" style="min-width: 20px;">&nbsp;</span>
+                    {{end}}
                     </div>
                     <div class="mdl-layout-spacer">&nbsp;</div>
                 </div>
