@@ -8,6 +8,12 @@ import (
 	"path/filepath"
 	"fmt"
 	"math"
+	"github.com/qor/admin"
+	"regexp"
+	"strings"
+	"github.com/qor/qor/resource"
+	"github.com/qor/qor"
+	"time"
 )
 
 type Article struct {
@@ -24,6 +30,13 @@ type Article struct {
 	//publish2.Schedule
 }
 
+type Category struct {
+	gorm.Model
+	//Id         int64  `orm:"auto"`
+	Name string //用户名
+	//Description    string  //描述
+}
+
 var (
 	tmplPath      = beego.AppConfig.String("publishArticleTmplPath")
 	htmlPath      = beego.AppConfig.String("publishArticleHtmlPath")
@@ -32,6 +45,92 @@ var (
 	imageBasePath = beego.AppConfig.String("uploadBaseUrl")
 	page          = 10
 )
+
+func InitArticleUi(adminConf *admin.Admin) {
+	// Create resources from GORM-backend model
+	//文章分类
+	category := adminConf.AddResource(&Category{}, &admin.Config{Name: "分类管理", Menu: []string{"资源管理"}})
+	category.Meta(&admin.Meta{Name: "Name", Label: "名称"})
+	//PageCount: 5,
+	article := adminConf.AddResource(&Article{}, &admin.Config{Name: "文章管理", Menu: []string{"资源管理"}})
+	article.Meta(&admin.Meta{Name: "Title", Label: "标题", Type: "text"})
+	article.Meta(&admin.Meta{Name: "ImgUrl", Label: "图片", Type: "kindimage"})
+	article.Meta(&admin.Meta{Name: "Content", Label: "内容", Type: "kindeditor"})
+	article.Meta(&admin.Meta{Name: "Category", Label: "分类"})
+	article.Meta(&admin.Meta{Name: "CreatedAt", Label: "创建时间"})
+	article.Meta(&admin.Meta{Name: "UpdatedAt", Label: "更新时间"})
+	article.Meta(&admin.Meta{Name: "Url", Label: "地址", Type: "readonly"})
+	article.Meta(&admin.Meta{Name: "IsPublish", Label: "是否发布", Type: "checkbox"})
+	article.IndexAttrs("Title", "Category", "IsPublish", "Url", "ImgUrl", "CreatedAt", "UpdatedAt")
+	//新增
+	article.NewAttrs("Title", "Url", "IsPublish", "Category", "ImgUrl", "Content")
+	//编辑
+	article.EditAttrs("Title", "Url", "IsPublish", "Category", "ImgUrl", "Content")
+	//增加发布功能：
+	// 发布按钮，显示到右侧上面。
+	article.Action(&admin.Action{
+		Name:  "publishAll",
+		Label: "全部发布",
+		Handler: func(actionArgument *admin.ActionArgument) error {
+			logs.Info("############### publishAll ###############")
+			//生成html代码。
+			GenArticleAndCategoryList(0)
+			return nil
+		},
+		Modes: []string{"collection"},
+	})
+	// 发布按钮，显示到右侧上面。
+	article.Action(&admin.Action{
+		Name:  "publish5page",
+		Label: "增量发布5页",
+		Handler: func(actionArgument *admin.ActionArgument) error {
+			logs.Info("############### publish5page ###############")
+			//生成html代码。
+			GenArticleAndCategoryList(5)
+			return nil
+		},
+		Modes: []string{"collection"},
+	})
+
+	article.AddProcessor(&resource.Processor{
+		Name: "process_store_data", // register another processor with
+		Handler: func(value interface{}, metaValues *resource.MetaValues, context *qor.Context) error {
+			if article, ok := value.(*Article); ok {
+				// do something...
+				logs.Info("################ article ##################")
+				if article.Url == "" {
+					t := article.CreatedAt //time.Now()
+					if t.IsZero() { //如果创建事件为空。
+						t = time.Now()
+					}
+					url := fmt.Sprintf("%d-%02d/%d.html", t.Year(), t.Month(), t.Unix())
+					logs.Info(t, url)
+					article.Url = url
+				}
+				//更新摘要。新建，修改都更新。
+				if article.Content != "" {
+					//如果摘要为空，且内容不为空。
+					//去除所有尖括号内的HTML代码，并换成换行符
+					re, _ := regexp.Compile("\\<[\\S\\s]+?\\>")
+					newContent := re.ReplaceAllString(article.Content, "\n")
+					//去除连续的换行符
+					re, _ = regexp.Compile("\\s{2,}")
+					newContent = re.ReplaceAllString(newContent, "\n")
+					newContent = strings.TrimSpace(newContent)
+					newContentRune := []rune(newContent)
+					if len(newContentRune) > 75 {
+						article.Description = string(newContentRune[0:75])
+					} else {
+						article.Description = newContent
+					}
+					logs.Info("description: ", article.Description)
+				}
+
+			}
+			return nil
+		},
+	})
+}
 
 func GenArticleAndCategoryList(maxPage int) {
 	//生成文章

@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>{{.SiteName}}</title>
+    {{println "<!--# include virtual=\"/widgets/meta.html\" -->" | str2html}}
+    <style>
+        .tab5-is-active { color: #fff; }
+        .tab5-is-active::after {
+            height: 2px;width: 100%;display: block;
+            content: " ";bottom: 0;left: 0;position: absolute;background: #fff;
+            animation: border-expand .2s cubic-bezier(.4,0,.4,1).01s alternate forwards;
+            transition: all 1s cubic-bezier(.4,0,1,1);
+        }
+    </style>
+</head>
+<body class="mdl-demo mdl-color--grey-100 mdl-color-text--grey-700 mdl-base">
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+
+    {{println "<!--# include virtual=\"/widgets/header.html\" -->" | str2html}}
+
+    <main class="mdl-layout__content">
+        <div class="mdl-grid">
+            <div class="mdl-cell mdl-cell--8-col">
+
+            {{ $WebBasePath := .WebBasePath }}
+            {{ $ImageBasePath := .ImageBasePath }}
+
+                <section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp">
+                    <div class="mdl-card mdl-cell mdl-cell--12-col">
+                        <table class="mdl-data-table mdl-shadow--2dp">
+                            <thead>
+                            <tr>
+                                <th>币种名称</th>
+                                <th>币种名称</th>
+                                <th>图标</th>
+                                <th>价格</th>
+                                <th>交易额</th>
+                                <th>价格变动</th>
+                                <th>发行量</th>
+                                <th>流通量</th>
+                                <th>总市值</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {{range .DataList}}
+                            <tr>
+                                <td>{{.Currency}}</td>
+                                <td>{{.Name}}</td>
+                                <td><img style="width: 25px;height: 25px;" src="{{.IconUrl}}"/></td>
+                                <td>{{.Price}}</td>
+                                <td>{{.Vol}}</td>
+                                <td>{{.Change}}</td>
+                                <td>{{.MaxSupply}}</td>
+                                <td>{{.Supply}}</td>
+                                <td>{{.MarketCap}}</td>
+                            </tr>
+                            {{end}}
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+
+            {{println "<!--# include virtual=\"/widgets/job_right.html\" -->" | str2html}}
+
+        </div>
+    </main>
+        {{println "<!--# include virtual=\"/widgets/footer.html\" -->" | str2html}}
+</div>
+<script src="https://cdn.staticfile.org/material-design-lite/1.3.0/material.min.js"></script>
+{{println "<!--# include virtual=\"/widgets/analytics.html\" -->" | str2html}}
+</body>
+</html>

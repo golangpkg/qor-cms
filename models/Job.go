@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 	"fmt"
 	"math"
+	"github.com/qor/admin"
 )
 
 type Job struct {
@@ -32,6 +33,53 @@ type JobCompany struct {
 	Name         string                    //标题
 	IndustryType string                    //行业分类
 	CompanyInfo  string `gorm:"type:text"` //企业描述
+}
+
+func InitJobUi(adminConf *admin.Admin) {
+	//################################ 招聘模块 ################################
+	jobCompany := adminConf.AddResource(&JobCompany{}, &admin.Config{Name: "招聘公司管理", Menu: []string{"招聘管理"}})
+	jobCompany.Meta(&admin.Meta{Name: "Name", Label: "公司名称"})
+	jobCompany.Meta(&admin.Meta{Name: "IndustryType", Label: "行业分类", Config: &admin.SelectOneConfig{
+		Collection: []string{"计算机/互联网/通信/电子", "会计/金融/银行/保险", "贸易/消费/制造/营运", "制药/医疗",
+			"广告/媒体", "房地产/建筑", "专业服务/教育/培训", "服务业", "物流/运输", "能源/原材料", "政府/非营利组织/其他"}}})
+	jobCompany.Meta(&admin.Meta{Name: "CompanyInfo", Label: "公司描述", Type: "kindeditor"})
+
+	job := adminConf.AddResource(&Job{}, &admin.Config{Name: "招聘职位管理", Menu: []string{"招聘管理"}})
+	job.Meta(&admin.Meta{Name: "IsPublish", Label: "是否发布", Type: "checkbox"})
+	job.Meta(&admin.Meta{Name: "Title", Label: "标题", Type: "text"})
+	job.Meta(&admin.Meta{Name: "Salary", Label: "薪水（/月）", Type: "text"})
+	job.Meta(&admin.Meta{Name: "JobCompany", Label: "公司名称"})
+	job.Meta(&admin.Meta{Name: "Locale", Label: "工作地点", Config: &admin.SelectOneConfig{
+		Collection: []string{"北京", "上海", "广州", "深圳", "天津", "杭州", "成都"}}})
+	job.Meta(&admin.Meta{Name: "Education", Label: "学历", Config: &admin.SelectOneConfig{
+		Collection: []string{"大专", "本科", "硕士", "博士"}}})
+	job.Meta(&admin.Meta{Name: "Age", Label: "年龄（岁）", Type: "text"})
+	job.Meta(&admin.Meta{Name: "WorkExperience", Label: "工作年限", Config: &admin.SelectOneConfig{
+		Collection: []string{"1-3年", "3-5年", "5-10年", "10年以上"}}})
+	job.Meta(&admin.Meta{Name: "Department", Label: "所属部门", Type: "text"})
+	job.Meta(&admin.Meta{Name: "ReportTo", Label: "汇报对象", Type: "text"})
+	job.Meta(&admin.Meta{Name: "PublishDate", Label: "发部日期", Type: "date"})
+	job.Meta(&admin.Meta{Name: "JobInfo", Label: "职位描述", Type: "kindeditor"})
+	job.IndexAttrs("Title", "Salary", "JobCompany", "Locale", "Education", "Age", "WorkExperience")
+	//新增
+	job.NewAttrs("IsPublish", "Title", "Salary", "JobCompany", "Locale", "Education", "Age", "WorkExperience",
+		"Department", "ReportTo", "PublishDate", "JobInfo")
+	//编辑
+	job.EditAttrs("IsPublish", "Title", "Salary", "JobCompany", "Locale", "Education", "Age", "WorkExperience",
+		"Department", "ReportTo", "PublishDate", "JobInfo")
+	//增加发布功能：
+	// 发布按钮，显示到右侧上面。
+	job.Action(&admin.Action{
+		Name:  "publishJobList",
+		Label: "发布",
+		Handler: func(actionArgument *admin.ActionArgument) error {
+			logs.Info("############### publishJobList ###############")
+			//生成html代码。
+			GenJobList()
+			return nil
+		},
+		Modes: []string{"collection"},
+	})
 }
 
 func GenJobList() {
