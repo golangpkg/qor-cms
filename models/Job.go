@@ -29,8 +29,9 @@ type Job struct {
 
 type JobCompany struct {
 	gorm.Model
-	Name        string                    //标题
-	CompanyInfo string `gorm:"type:text"` //企业描述
+	Name         string                    //标题
+	IndustryType string                    //行业分类
+	CompanyInfo  string `gorm:"type:text"` //企业描述
 }
 
 func GenJobList() {

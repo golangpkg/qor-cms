@@ -133,6 +133,9 @@ func main() {
 	//################################ 招聘模块 ################################
 	jobCompany := Admin.AddResource(&models.JobCompany{}, &admin.Config{Name: "招聘公司管理", Menu: []string{"招聘管理"}})
 	jobCompany.Meta(&admin.Meta{Name: "Name", Label: "公司名称"})
+	jobCompany.Meta(&admin.Meta{Name: "IndustryType", Label: "行业分类", Config: &admin.SelectOneConfig{
+		Collection: []string{"计算机/互联网/通信/电子", "会计/金融/银行/保险", "贸易/消费/制造/营运", "制药/医疗",
+			"广告/媒体", "房地产/建筑", "专业服务/教育/培训", "服务业", "物流/运输", "能源/原材料", "政府/非营利组织/其他"}}})
 	jobCompany.Meta(&admin.Meta{Name: "CompanyInfo", Label: "公司描述", Type: "kindeditor"})
 
 	job := Admin.AddResource(&models.Job{}, &admin.Config{Name: "招聘职位管理", Menu: []string{"招聘管理"}})
