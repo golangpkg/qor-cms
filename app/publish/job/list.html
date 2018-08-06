@@ -4,8 +4,8 @@
     <title>{{.SiteName}}</title>
     {{println "<!--# include virtual=\"/widgets/meta.html\" -->" | str2html}}
     <style>
-        .tab0-is-active { color: #fff; }
-        .tab0-is-active::after {
+        .tab5-is-active { color: #fff; }
+        .tab5-is-active::after {
             height: 2px;width: 100%;display: block;
             content: " ";bottom: 0;left: 0;position: absolute;background: #fff;
             animation: border-expand .2s cubic-bezier(.4,0,.4,1).01s alternate forwards;
@@ -32,6 +32,7 @@
                             <a href="/job-{{.ID}}.html" target="_blank" class="mdl-button"><h4 style="color: rgb(255, 153, 0);">{{.Salary}}</h4></a>
                             <a href="/job-{{.ID}}.html" target="_blank" class="mdl-button"><h4>{{.JobCompany.Name}}</h4></a>
                             <p>&nbsp;</p>
+                            <h5 class="mdl-color-text--grey">行业分类：{{.JobCompany.IndustryType}}</h5>
                             <h5 class="mdl-color-text--grey">发布时间：{{.PublishDate}}</h5>
                             <h5 class="mdl-color-text--grey">工作地点：{{.Locale}}</h5>
                         </div>
