@@ -12,3 +12,5 @@ tmp
 qor-cms.exe
 qor-cms.exe~
 qor-cms
+static/*.html
+static/html

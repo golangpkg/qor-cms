@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>{{.SiteName}}</title>
+    {{println "<!--# include virtual=\"/widgets/meta.html\" -->" | str2html}}
+    <style>
+        .tab0-is-active { color: #fff; }
+        .tab0-is-active::after {
+            height: 2px;width: 100%;display: block;
+            content: " ";bottom: 0;left: 0;position: absolute;background: #fff;
+            animation: border-expand .2s cubic-bezier(.4,0,.4,1).01s alternate forwards;
+            transition: all 1s cubic-bezier(.4,0,1,1);
+        }
+    </style>
+</head>
+<body class="mdl-demo mdl-color--grey-100 mdl-color-text--grey-700 mdl-base">
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+
+    {{println "<!--# include virtual=\"/widgets/header.html\" -->" | str2html}}
+
+    <main class="mdl-layout__content">
+        <div class="mdl-grid">
+            <div class="mdl-cell mdl-cell--8-col">
+
+            {{ $WebBasePath := .WebBasePath }}
+            {{ $ImageBasePath := .ImageBasePath }}
+            {{range .DataList}}
+                <section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp">
+                    <div class="mdl-card mdl-cell mdl-cell--12-col">
+                        <div class="mdl-card__supporting-text">
+                            <a href="/job-{{.ID}}.html" target="_blank" class="mdl-button"><h4>{{.Title}}</h4></a>
+                            <a href="/job-{{.ID}}.html" target="_blank" class="mdl-button"><h4 style="color: rgb(255, 153, 0);">{{.Salary}}</h4></a>
+                            <a href="/job-{{.ID}}.html" target="_blank" class="mdl-button"><h4>{{.JobCompany.Name}}</h4></a>
+                            <p>&nbsp;</p>
+                            <h5 class="mdl-color-text--grey">发布时间：{{.PublishDate}}</h5>
+                            <h5 class="mdl-color-text--grey">工作地点：{{.Locale}}</h5>
+                        </div>
+                        <div class="mdl-card__actions">
+                            <a href="/job-{{.ID}}.html" target="_blank" class="mdl-button">招聘详情</a>
+                        </div>
+                    </div>
+                </section>{{end}}
+            </div>
+
+            {{println "<!--# include virtual=\"/widgets/job_right.html\" -->" | str2html}}
+
+            <section class="section--center mdl-grid mdl-grid--no-spacing " style="margin-top: 25px;">
+                <div class="mdl-cell mdl-cell--12-col" style="text-align: center;">
+                    {{.PageHtml | str2html}}
+                </div>
+            </section>
+        </div>
+    </main>
+        {{println "<!--# include virtual=\"/widgets/footer.html\" -->" | str2html}}
+</div>
+<script src="https://cdn.staticfile.org/material-design-lite/1.3.0/material.min.js"></script>
+<script src="https://cdn.staticfile.org/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdn.staticfile.org/flexslider/2.7.1/jquery.flexslider.min.js"></script>
+<script>
+    $(function(){
+        $('.flexslider').flexslider({
+            animation: 'slide',
+            touch: true,
+            directionNav: false,
+            smoothHeight: true
+        });
+    })
+</script>
+{{println "<!--# include virtual=\"/widgets/analytics.html\" -->" | str2html}}
+</body>
+</html>

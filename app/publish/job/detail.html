@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>{{.SiteName}}-{{.Article.Title}}</title>
+    {{println "<!--# include virtual=\"/widgets/meta.html\" -->" | str2html}}
+    <meta name="referrer" content="always">
+    <meta name="description" content="{{.Article.Description}}" />
+    <meta name="keywords" content="{{.SiteName}}-{{.Article.Title}}" />
+    <style>
+        .tab{{.CategoryId}}-is-active { color: #fff; }
+        .tab{{.CategoryId}}-is-active::after {height: 2px;width: 100%;display: block;
+            content: " ";bottom: 0;left: 0;position: absolute;background: #fff;
+            animation: border-expand .2s cubic-bezier(.4,0,.4,1).01s alternate forwards;
+            transition: all 1s cubic-bezier(.4,0,1,1);}
+    </style>
+</head>
+<body class="mdl-demo mdl-color--grey-100 mdl-color-text--grey-700 mdl-base">
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+
+    {{println "<!--# include virtual=\"/widgets/header.html\" -->" | str2html}}
+    <div class="demo-ribbon"></div>
+    <main class="mdl-layout__content">
+        <div class="mdl-grid">
+            <div class="mdl-cell mdl-cell--8-col">
+            <section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp" style="margin-top:35px;">
+                <div class="mdl-card mdl-cell mdl-cell--12-col">
+                    <div class="mdl-card__supporting-text">
+                        <h4>{{.Data.Title}}</h4>
+                        {{str2html .Data.JobInfo}}
+                    </div>
+
+                    <div class="mdl-layout-spacer">&nbsp;</div>
+                </div>
+            </section>
+            </div>
+            </section>
+        {{println "<!--# include virtual=\"/widgets/job_right.html\" -->" | str2html}}
+        </div>
+    </main>
+        {{println "<!--# include virtual=\"/widgets/footer.html\" -->" | str2html}}
+</div>
+<script src="https://cdn.staticfile.org/material-design-lite/1.3.0/material.min.js"></script>
+{{println "<!--# include virtual=\"/widgets/analytics.html\" -->" | str2html}}
+</body>
+</html>
