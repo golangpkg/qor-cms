@@ -33,4 +33,6 @@ func (c *MainController) GetApiPublish() {
 	logs.Info("############### api  publish5page ###############")
 	//生成html代码。
 	models.GenArticleAndCategoryList(5)
+	//生成coin top 100 排名。
+	models.GenCoin100rankList()
 }
